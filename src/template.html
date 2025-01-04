@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ToDo App</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <header>
+         <div class="logo-container">
+             <span class="logo"> ToDo App</span>
+         </div>
+        </header>
+        <main>
+         <section>
+         <div class='nav-container'>
+             <ul id='default-btns-container'>
+                 <li>
+                    <button class='default-btn' id='inbox-btn'>
+                    Inbox
+                    </button> 
+                 </li>
+                 <li>
+                    <button class='default-btn' id='today-btn'>
+                    Today
+                    </button> 
+                 </li>
+                 <li>
+                    <button class='default-btn' id='week-btn'>
+                    This Week
+                    </button> 
+                 </li>
+             </ul>
+             </div>
+             <div class='projects-wrapper'>
+                 <div class='project-label-wrapper'>
+                 <span class='myProjects'>My Projects</span>
+                 <button class='add-btn' id='add-project-btn'>+</button>
+                 </div>  
+             <ul id='projects-container'>
+             <li>
+               <button class='project-btn'>
+               # Fitness
+               </button>
+             </li>
+             </ul>
+             </div>
+         </section>
+         <div class="right-main">
+             <div class="btn-container">
+                 <button class='add-btn' id="open-btn">+</button>
+             </div>
+             <div id="list-container">
+                
+             </div>
+ 
+         </div>
+        </main>
+ 
+        <dialog class="modal" id="modal">
+         <h2> Add new task</h2>
+         <form class='form' method='dialog'>
+             <div class="form-row">
+                 <input type="text" id="form-title" placeholder="Task"> 
+             </div>
+             <button class="submit-form" id="submit-form" type="submit">Submit</button>
+         </form>
+        </dialog>
+        
+         <dialog class="modal" id="project-modal">
+         <h2> Add New Project </h2>
+         <form class='form' method='dialog'>
+             <div class="form-row">
+                 <input type="text" id="project-form-title" placeholder="Project"> 
+             </div>
+             <button class="submit-form" id="project-submit-form" type="submit">Submit</button>
+         </form>
+        </dialog>
+     </body>
+</html>
