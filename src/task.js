@@ -14,6 +14,10 @@ class Task {
         return this.dueDate;
     }
 
+    setDueDate(date) {
+        this.dueDate = date;
+    }
+
     isCompleted() {
         return this.completed;
     }

@@ -12,6 +12,10 @@ class Project {
         this.tasks.splice(index, 1);
     }
 
+    clearTasks() {
+        this.tasks = [];
+    }
+
     completeTask(index) {
         const task = this.getTask(index);
         task.completeTask();
@@ -27,6 +31,16 @@ class Project {
 
     getName() {
         return this.name;
+    }
+
+    getDate(index) {
+        const task = this.getTask(index);
+        task.getDueDate();
+    }
+
+    setDate(index, newDate) {
+        const task = this.getTask(index);
+        task.setDueDate(newDate);
     }
 }
 

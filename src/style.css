@@ -102,6 +102,7 @@ li {
     width: 100%;
     border: 1px solid grey;
     padding: 10px;
+    padding-right: 20px;
     border-radius: 10px;
     background-color: white;
 }
@@ -122,11 +123,27 @@ li {
   width: 18px;
 }
 
+.complete-task {
+    cursor: pointer;
+}
+
 .task-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%;
+  width: 100%;
+}
+
+.date-span {
+    cursor: pointer;
+}
+
+.date-input {
+    display: none;
+}
+
+.active {
+    display: block;
 }
 
 /* Modal Code */ 
@@ -181,7 +198,7 @@ form {
     background-color: rgba(0, 63, 136, 0.9);
 }
 
-input {
+input:not([type='date']) {
     padding: 5px 10px;
     border-radius: 5px;
     font-family: 'Poppins', 'sans-serif';
