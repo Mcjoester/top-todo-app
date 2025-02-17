@@ -10,6 +10,7 @@ class ToDoApp {
     constructor() {
         this.projectService = new ProjectService();
         this.taskService = new TaskService(this.projectService);
+        this.projectService.setTaskService(this.taskService)
         this.todoUI = new ToDoUI(this.taskService, this.projectService, '#list-container', '#project-container', '#default-btn-container');
         this.taskForm = new TaskForm(task => this.handleTaskFormSubmit(task));
         this.projectForm = new ProjectForm(project => this.handleProjectSubmitForm(project));

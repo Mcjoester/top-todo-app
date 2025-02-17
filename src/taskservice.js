@@ -14,6 +14,7 @@ class TaskService {
         const project = this.projectService.getProject(projectName);
         if (project) {
             project.addTask(task);
+            console.log(`Task added to project: ${project.name}`, task);
         } else {
             console.log(`${projectName} does not exist`);
             return;
@@ -23,6 +24,7 @@ class TaskService {
             const inbox = this.projectService.getProject('Inbox');
             if (inbox) {
                 inbox.addTask(task);
+                console.log(`Task added to inbox`, task);
             }
         }
     }
@@ -30,7 +32,7 @@ class TaskService {
     setTaskDateFromAllProjects(task, newDate) {
         const projects = this.projectService.getProjects(); // Dynamically fetch all projects
         projects.forEach((project) => {
-            const taskIndex = project.getTasks().indexOf(task); // Find the task in the current project
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id); // Find the task in the current project
             if (taskIndex !== -1) {
                 project.setDate(taskIndex, newDate); // Update the task's date
             }
@@ -58,7 +60,7 @@ class TaskService {
     completeTaskFromAllProjects(task) {
         const projects = this.projectService.getProjects();
         projects.forEach((project) => {
-            const taskIndex = project.getTasks().indexOf(task);
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
             if (taskIndex !== -1) {
                 project.completeTask(taskIndex);
             }
@@ -82,10 +84,14 @@ class TaskService {
 
     removeTaskFromAllProjects(task) {
         const projects = this.projectService.getProjects();
+        console.log(`Removing task ${task.title} ID: ${task.id} from all projects`)
         projects.forEach((project) => {
-            const taskIndex = project.getTasks().indexOf(task);
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
             if (taskIndex !== -1) {
+                (console.log(`Removing task from project: ${project.name}`));
                 project.removeTask(taskIndex);
+            } else {
+                console.log(`Task not found in project ${project.name}`);
             }
         });
     }
@@ -95,6 +101,7 @@ class TaskService {
         if (project) {
             const task = project.getTasks()[taskIndex];
             if (task) {
+                console.log(`Removing task ${task.title}, ID: ${task.id} from all projects`);
                 // Remove task from all projects
                 this.removeTaskFromAllProjects(task);
             } else {
@@ -105,9 +112,44 @@ class TaskService {
         }
     }
 
+    removeAllTasksFromProject(projectName) {
+        const project = this.projectService.getProject(projectName);
+        if (project) {
+            const tasks = [...project.getTasks()];
+            console.log(`Tasks in project ${projectName}:`, tasks);
+            tasks.forEach(task => {
+                console.log(`Removing task ${task.title}, ID: ${task.id} from all projects`)
+                this.removeTaskFromAllProjects(task);
+            });
+            console.log(`All tasks from project - ${projectName} have been removed`);
+        } else {
+            console.log('Project not found');
+        }
+
+        const inbox = this.projectService.getProject('Inbox');
+        console.log('Inbox tasks after removal', inbox.getTasks());
+    }
+
     getTasks(projectName) {
         const project = this.projectService.getProject(projectName);
         return project ? project.getTasks() : [];
+    }
+
+    getSortedTasks(projectName) {
+        const project = this.projectService.getProject(projectName);
+        if (!project) {
+            console.log('Project not found');
+            return [];
+        }
+
+        const tasks = project.getTasks();
+
+        // Sort tasks by due date
+        return tasks.sort((taskA, taskB) => {
+            const dateA = taskA.getDueDate() || '9999-12-31';
+            const dateB = taskB.getDueDate() || '9999-12-31';
+            return dateA.localeCompare(dateB);
+        })
     }
 
     getTodayTasks() {
@@ -173,7 +215,13 @@ class TaskService {
             const dueDate = task.getDueDate();
             return dueDate >= startOfWeekStr && dueDate <= endOfWeekStr;
         });
-        return thisWeekTasks;
+
+        // Sort tasks by due date
+        return thisWeekTasks.sort((taskA, taskB) => {
+            const dateA = taskA.getDueDate() || '9999-12-31';
+            const dateB = taskB.getDueDate() || '9999-12-31';
+            return dateA.localeCompare(dateB);
+        })
     }
 
     addTasksForThisWeek() {

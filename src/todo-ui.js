@@ -1,5 +1,6 @@
 
 
+
 class ToDoUI {
     constructor(taskService, projectService, cardContainerSelector, buttonContainerSelector, defaultContainerSelector) {
         this.taskService = taskService;
@@ -27,7 +28,28 @@ class ToDoUI {
         const button = document.createElement('button');
         button.setAttribute('data-index', index);
         button.className = 'default-btn';
-        button.textContent = `${project.name}`;
+       // button.textContent = `${project.name}`;
+
+       //Create an icon element
+       const icon = document.createElement('span');
+       icon.className = 'material-icons';
+
+       // Assign icon based on project name
+       if (project.name === 'Inbox') {
+        icon.textContent = 'inbox';
+        icon.classList.add('inbox-icon');
+       } else if (project.name === 'Today') {
+        icon.textContent = 'today';
+        icon.classList.add('today-icon');
+       } else if (project.name === 'This Week') {
+        icon.textContent = 'date_range';
+        icon.classList.add('week-icon');
+       } else {
+        icon.textContent = 'folder';
+       }
+
+       button.appendChild(icon);
+       button.appendChild(document.createTextNode(` ${project.name}`));
 
         button.addEventListener('click', () => {
             const addTaskBtn = document.getElementById('open-btn');
@@ -85,12 +107,48 @@ class ToDoUI {
         const button = document.createElement('button');
         button.setAttribute('data-index', index);
         button.className = 'project-btn';
-        button.textContent = `# ${project.name}`;
+        //button.textContent = `# ${project.name}`;
+        const leftBtnPanel = document.createElement('div');
+        leftBtnPanel.className = 'left-btn-panel';
+        //const btnSpan = document.createElement('span');
+        //btnSpan.textContent = `# ${project.name}`;
+        const icon = document.createElement('span');
+        icon.className = 'material-icons';
+        icon.textContent = 'tag';
+        icon.classList.add('tag-icon');
+
+
+        const rightBtnPanel = document.createElement('div');
+        rightBtnPanel.className = 'right-btn-panel';
+        const closeIcon = document.createElement('span');
+        closeIcon.classList.add('material-icons', 'close-icon');
+        closeIcon.textContent = 'close';
+
+        // Add event listener to the close icon
+    closeIcon.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent the button click event from firing
+        this.projectService.removeProject(project.name); // Call removeProject method
+        this.renderProjects();
+        const inbox = 'Inbox';
+        const getInboxProject = this.projectService.getProject(inbox);
+        this.setActiveProject(getInboxProject);
+    });
+
+        
 
         button.addEventListener('click', () => {
+            const addTaskBtn = document.getElementById('open-btn');
+            if (addTaskBtn.style.display === 'none') {
+                addTaskBtn.style.display = 'block';
+            }
             this.setActiveProject(project);
         });
 
+        leftBtnPanel.appendChild(icon);
+        leftBtnPanel.appendChild(document.createTextNode(` ${project.name}`));
+        rightBtnPanel.appendChild(closeIcon);
+        button.appendChild(leftBtnPanel);
+        button.appendChild(rightBtnPanel);
         li.appendChild(button);
         this.buttonContainer.appendChild(li);
     }
@@ -100,7 +158,7 @@ class ToDoUI {
     renderTasks(projectName) {
         this.cardContainer.textContent = '';
         projectName = this.activeProject;
-        const tasks = this.taskService.getTasks(projectName);
+        const tasks = this.taskService.getSortedTasks(projectName);
         if (tasks.length === 0) {
             this.cardContainer.textContent = `No damn tasks in ${projectName}`;
         } else {
@@ -125,6 +183,7 @@ class ToDoUI {
         }
     }
 
+    // This Week
     renderThisWeekTasks() {
         this.cardContainer.textContent = '';
         const inboxTasks = this.taskService.getTasks('Inbox');
@@ -150,18 +209,18 @@ class ToDoUI {
         }
     }
 
-    createTaskCard(task, index) {
+    createTaskCard(task) {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card';
-        cardDiv.setAttribute('data-index', index);
+        cardDiv.setAttribute('data-task-id', task.id);
 
         const radioContainer = this.createRadioContainer();
         const taskContainer = this.createTaskContainer();
-        const radioButton = this.createRadioButton(index);
+        const radioButton = this.createRadioButton(task.id);
 
         const titleSpan = this.createSpan(task.title);
         const dueDateSpan = this.createDateSpan(`Due: ${task.dueDate}`);
-        const dueDateInput = this.createDueDateInput(index);
+        const dueDateInput = this.createDueDateInput(task.id);
 
         cardDiv.appendChild(radioContainer);
         cardDiv.appendChild(taskContainer);
@@ -209,7 +268,7 @@ class ToDoUI {
         return dateSpan;
     }
 
-    createDueDateInput(index) {
+    createDueDateInput(taskId) {
         const dateInput = document.createElement('input');
         dateInput.className = 'date-input';
         dateInput.type = 'date';
@@ -224,16 +283,19 @@ class ToDoUI {
             const year = splitDate[0];
             const formattedDate = `${month}/${day}/${year}`;
 
-            this.taskService.setTaskDate(projectName, index, formattedDate);
-            if (projectName === 'Today') {
-            console.log(`Setting selected date ${formattedDate} from task service on project ${projectName}`);
-            this.renderTodayTasks();
-            } else if (projectName === 'This Week') {
-                console.log(`Setting selected date ${formattedDate} from task service on project ${projectName}`)
-                this.renderThisWeekTasks();
-            } else {
-                console.log(`Setting selected date ${formattedDate} from task service on project ${projectName}`);
-                this.renderTasks();
+            // Find the task index using the task ID
+            const tasks = this.taskService.getTasks(projectName);
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+            if (taskIndex !== -1) {
+                this.taskService.setTaskDate(projectName, taskIndex, formattedDate);
+                if (projectName === 'Today') {
+                    this.renderTodayTasks();
+                } else if (projectName === 'This Week') {
+                    this.renderThisWeekTasks();
+                } else {
+                    this.renderTasks();
+                }
             }
 
             dateInput.classList.remove('active');
@@ -242,21 +304,28 @@ class ToDoUI {
             const dateSpan = dateInput.previousElementSibling;
             if (dateSpan) {
                 dateSpan.style.display = 'block';
-                dateSpan.textContent = `${selectedDate}`;
+                dateSpan.textContent = `Due: ${formattedDate}`;
             }
-        })
+        });
         return dateInput;
     }
 
-    createRadioButton(index) {
+    createRadioButton(taskId) {
         const radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.className = 'complete-task';
 
         radioButton.addEventListener('change', () => {
             const projectName = this.activeProject;
-            this.taskService.removeTask(projectName, index);
-            this.renderTasks();
+
+            // Find the task index using the task ID
+            const tasks = this.taskService.getTasks(projectName);
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+            if (taskIndex !== -1) {
+                this.taskService.removeTask(projectName, taskIndex);
+                this.renderTasks();
+            }
         });
         return radioButton;
     }

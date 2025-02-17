@@ -1,4 +1,5 @@
 import { Project } from "./project";
+import { TaskService } from "./taskservice";
 
 class ProjectService {
     constructor() {
@@ -7,6 +8,10 @@ class ProjectService {
         this.defaultProject.forEach(projectName => {
             this.projects[projectName] = new Project(projectName);
         })
+    }
+
+    setTaskService(taskService) {
+        this.taskService = taskService;
     }
 
     addProject(projectName) {
@@ -19,7 +24,9 @@ class ProjectService {
 
     removeProject(projectName) {
         if (!this.defaultProject.includes(projectName) && this.projects[projectName]) {
-            delete this.project[projectName];
+            this.taskService.removeAllTasksFromProject(projectName);
+            delete this.projects[projectName];
+            console.log(`Project: ${projectName} has been removed`);
         } else {
             console.log('Cannot remove the default project or a non-existing project.');
         }

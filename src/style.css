@@ -60,6 +60,14 @@ li {
   border-radius: 10px;
 }
 
+.default-btn {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+}
+
+
 /* Button code */
 .btn-container {
     margin-bottom: 10px;
@@ -93,6 +101,55 @@ li {
   padding: 5px 10px;
   font-size: 16px;
 }
+
+.project-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-btn-panel {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+}
+
+.inbox-icon, .today-icon, .week-icon {
+    color: #3e3e3d;
+}
+
+.tag-icon {
+    font-size: 15px;
+}
+
+.close-icon {
+    font-size: 15px;
+    color: #626160;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.close-icon:hover {
+    font-weight: bold;
+}
+
+.project-btn:hover .close-icon {
+    visibility: visible;
+}
+
+button.project-btn:focus, span>#text {
+    font-weight: bold;
+}
+
+
+button.default-btn:focus, .inbox-icon .today-icon .week-icon {
+    font-weight: bold;
+}
+
+
 
 
 /* Card code */

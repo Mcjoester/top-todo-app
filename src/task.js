@@ -1,9 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
+
 // Task class representing a single to-do item 
 class Task {
     constructor(title) {
         this.title = title;
         this.dueDate = '';
         this.completed = false;
+        this.id = uuidv4();
     }
 
     getTitle() {
@@ -12,6 +15,10 @@ class Task {
 
     getDueDate() {
         return this.dueDate;
+    }
+
+    getTaskID() {
+        return this.id;
     }
 
     setDueDate(date) {
