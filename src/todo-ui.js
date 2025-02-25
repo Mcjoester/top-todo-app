@@ -5,6 +5,7 @@ class ToDoUI {
     constructor(taskService, projectService, cardContainerSelector, buttonContainerSelector, defaultContainerSelector) {
         this.taskService = taskService;
         this.projectService = projectService;
+        this.titleContainer = document.querySelector('#title-main-container');
         this.cardContainer = document.querySelector('#list-container');
         this.defaultBtnContainer = document.querySelector('#default-btns-container');
         this.buttonContainer = document.querySelector('#projects-container');
@@ -53,8 +54,10 @@ class ToDoUI {
 
         button.addEventListener('click', () => {
             const addTaskBtn = document.getElementById('open-btn');
-            if (button.textContent === 'Today' || button.textContent === 'This Week') {
+            const taskForm = document.querySelector('.task-form');
+            if (project.name === 'Today' || project.name === 'This Week') {
                 addTaskBtn.style.display = 'none';
+                taskForm.style.display = 'none';
             } else {
                 addTaskBtn.style.display = 'block';
             }
@@ -127,11 +130,15 @@ class ToDoUI {
         // Add event listener to the close icon
     closeIcon.addEventListener('click', (event) => {
         event.stopPropagation(); // Prevent the button click event from firing
+        if (project.name === this.activeProject) {
         this.projectService.removeProject(project.name); // Call removeProject method
         this.renderProjects();
-        const inbox = 'Inbox';
-        const getInboxProject = this.projectService.getProject(inbox);
+        const getInboxProject = this.projectService.getProject('Inbox');
         this.setActiveProject(getInboxProject);
+        } else {
+            this.projectService.removeProject(project.name);
+            this.renderProjects();
+        }
     });
 
         
@@ -159,6 +166,7 @@ class ToDoUI {
         this.cardContainer.textContent = '';
         projectName = this.activeProject;
         const tasks = this.taskService.getSortedTasks(projectName);
+        this.titleContainer.textContent = `${projectName}`;
         if (tasks.length === 0) {
             this.cardContainer.textContent = `No damn tasks in ${projectName}`;
         } else {
@@ -170,6 +178,8 @@ class ToDoUI {
     renderTodayTasks() {
         this.cardContainer.textContent = '';
         const inboxTasks = this.taskService.getTasks('Inbox');
+        const projectName = this.activeProject;
+        this.titleContainer.textContent = `${projectName}`;
         if (inboxTasks.length === 0) {
             this.cardContainer.textContent = `No tasks due ${this.activeProject}`;
             return;
@@ -187,6 +197,8 @@ class ToDoUI {
     renderThisWeekTasks() {
         this.cardContainer.textContent = '';
         const inboxTasks = this.taskService.getTasks('Inbox');
+        const projectName = this.activeProject;
+        this.titleContainer.textContent = `${projectName}`;
         if (inboxTasks.length === 0) {
             this.cardContainer.textContent = `No tasks due ${this.activeProject}`;
             return;
@@ -208,6 +220,8 @@ class ToDoUI {
             console.log('Failed to update task date');
         }
     }
+
+
 
     createTaskCard(task) {
         const cardDiv = document.createElement('div');

@@ -25,18 +25,27 @@ class ToDoApp {
     setupEventListener() {
         const openButton = document.querySelector('#open-btn');
         const modal = document.querySelector('#modal');
+        const taskForm = document.querySelector('.task-form');
+        const taskTitle = document.querySelector('#form-title');
 
         const projectOpenBtn = document.querySelector('#add-project-btn');
         const projectModal = document.querySelector('#project-modal');
+        const projectForm = document.querySelector('.project-form');
+        const projectTitle = document.querySelector('#project-form-title');
 
         openButton.addEventListener('click', () => {
-            console.log('Modal is being opened');
-            modal.showModal();
+            openButton.style.display = 'none';
+            taskForm.style.display = 'block';
+            taskTitle.focus();
         });
 
         projectOpenBtn.addEventListener('click', () => {
-            console.log('Project modal is being opened');
-            projectModal.showModal();
+            projectOpenBtn.style.display = 'none';
+            projectOpenBtn.parentElement.style.marginBottom = '0px';
+            projectForm.style.display = 'block';
+            projectTitle.focus();
+
+            
         });
     }
 

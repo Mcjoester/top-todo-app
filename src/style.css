@@ -8,7 +8,8 @@
 
 .logo-container {
     padding: 20px;
-    border-bottom: 2px solid black;
+    background-color: #2a2a2a;
+    color: white;
 }
 
 .logo {
@@ -25,18 +26,18 @@ main {
 }
 
 section {
-    border-right: 2px solid black;
     padding: 20px;
-    width: 250px;
+    width: 350px;
+    background-color: rgb(228, 227, 227);
 }
 
 .right-main {
-    padding: 20px;
+    padding: 20px 50px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    background-color: #626160;
+    background-color: #f4f4f4;
     font-family: 'Poppins', 'sans-serif';
 }
 
@@ -71,23 +72,36 @@ li {
 /* Button code */
 .btn-container {
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 50px;
 }
 
 .add-btn {
     padding: 10px 15px;
     border-radius: 10px;
     border: none;
-    background-color: #4c67df;
-    font-size: 25px;
+    background-color: #283d3b;
+    color: #e5e5e5;
+    font-size: 20px;
+    width: 100%;
+    font-family: 'Poppins', 'sans-serif';
+    font-weight: 700;
 }
 
-.project-label-wrapper {
+.add-btn:hover {
+    background-color: #38302e;
+}
+
+.project-label-wrapper, .add-project-wrapper {
   display: flex;
   gap: 10px;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
+
 
 .myProjects {
  font-family: 'Poppins', 'sans-serif';
@@ -98,8 +112,16 @@ li {
 #add-project-btn {
   font-family: 'Poppins', 'sans-serif';
   font-weight: bold;
-  padding: 5px 10px;
+  padding: 10px 15px;
+  border: none;
+  width: 100%;
   font-size: 16px;
+  background-color: #283d3b;
+  color: #e5e5e5;
+}
+
+#add-project-btn:hover {
+    background-color: #38302e; 
 }
 
 .project-btn {
@@ -157,16 +179,15 @@ button.default-btn:focus, .inbox-icon .today-icon .week-icon {
     display: flex;
     gap: 10px;
     width: 100%;
-    border: 1px solid grey;
     padding: 10px;
     padding-right: 20px;
     border-radius: 10px;
     background-color: white;
+    box-shadow: 0 3px 5px rgb(65, 65, 65);
 }
 
 /* List container */
 #list-container {
-    padding-left: 100px;
     padding-right: 50px;
     display: flex;
     flex-direction: column;
@@ -201,6 +222,40 @@ button.default-btn:focus, .inbox-icon .today-icon .week-icon {
 
 .active {
     display: block;
+}
+
+#title-main-container {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Project Form */
+.project-form {
+    display: none;
+}
+
+.project-btns-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+button#project-submit-form, button#project-cancel-form, button.submit-form, button.cancel-form {
+    width: 100%;
+}
+
+/* Task Form */
+.task-form {
+    display: none;
+    padding-right: 50px;
+}
+
+.task-btns-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Modal Code */ 
@@ -242,17 +297,31 @@ form {
     width: 100%;
 }
 
-.submit-form {
+.submit-form, .cancel-form {
     font-size: 18px;
-    color: rgba(255, 255, 255, 0.88);
-    padding: 5px 10px;
+    color: #e5e5e5;
+    padding: 10px 15px;
     border: none;
     border-radius: 10px;
-    background-color: #4c67df;
+    font-family: 'Poppins', 'sans-serif';
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.submit-form {
+    background-color: #283d3b;
 }
 
 .submit-form:hover {
-    background-color: rgba(0, 63, 136, 0.9);
+    background-color: #38302e;
+}
+
+.cancel-form {
+    background-color: #c44536;
+}
+
+.cancel-form:hover {
+    background-color: #772e25;
 }
 
 input:not([type='date']) {

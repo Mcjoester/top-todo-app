@@ -9,6 +9,11 @@ class TaskService {
     }
 
     addNewTask(title, projectName) {
+        if (!title || !title.trim()) {
+            console.log('Task title cannot be empty');
+            return;
+        };
+        
         const task = new Task(title);
 
         const project = this.projectService.getProject(projectName);

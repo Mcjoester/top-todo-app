@@ -39,7 +39,6 @@
              <div class='projects-wrapper'>
                  <div class='project-label-wrapper'>
                  <span class='myProjects'>My Projects</span>
-                 <button class='add-btn' id='add-project-btn'>+</button>
                  </div>  
              <ul id='projects-container'>
              <li>
@@ -48,15 +47,39 @@
                </button>
              </li>
              </ul>
+             <div class='add-project-wrapper'>
+                <button class='add-btn' id='add-project-btn'>+ Add Project</button>
+                </div> 
+                <form class='form project-form' method='dialog'>
+                    <div class="form-row">
+                        <input type="text" id="project-form-title" placeholder="Project"> 
+                    </div>
+                    <div class="project-btns-container">
+                    <button class="submit-form" id="project-submit-form" type="submit">Add</button>
+                    <button class="cancel-form" id="project-cancel-form" type="cancel">Cancel</button>
+                   </div>
+                </form>
              </div>
          </section>
          <div class="right-main">
-             <div class="btn-container">
-                 <button class='add-btn' id="open-btn">+</button>
-             </div>
+            <div id="title-main-container">
+
+            </div>
              <div id="list-container">
                 
              </div>
+             <div class="btn-container">
+                <button class='add-btn' id="open-btn">+ Add New Task</button>
+            </div>
+            <form class='form task-form' method='dialog'>
+                <div class="form-row">
+                    <input type="text" id="form-title" placeholder="Task" required> 
+                </div>
+                <div class="task-btns-container">
+                <button class="submit-form" id="submit-form" type="submit">Add</button>
+                <button class="cancel-form" id="cancel-form" type="cancel">Cancel</button>
+                </div>
+            </form>
  
          </div>
         </main>
@@ -73,11 +96,14 @@
         
          <dialog class="modal" id="project-modal">
          <h2> Add New Project </h2>
-         <form class='form' method='dialog'>
+         <form class='form project-form' method='dialog'>
              <div class="form-row">
                  <input type="text" id="project-form-title" placeholder="Project"> 
              </div>
-             <button class="submit-form" id="project-submit-form" type="submit">Submit</button>
+             <div class="project-btns-container">
+             <button class="submit-form" id="project-submit-form" type="submit">Add</button>
+             <button class="cancel-form" id="project-cancel-form" type="cancel">Cancel</button>
+            </div>
          </form>
         </dialog>
      </body>

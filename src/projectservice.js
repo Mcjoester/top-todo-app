@@ -15,7 +15,7 @@ class ProjectService {
     }
 
     addProject(projectName) {
-        if (!this.projects[projectName]) {
+        if (!this.projects[projectName] && projectName !== '') {
             this.projects[projectName] = new Project(projectName);
         } else {
             console.log('Project already exists');
@@ -37,7 +37,7 @@ class ProjectService {
     }
 
     getProject(projectName) {
-        return this.projects[projectName] || null;
+        return this.projects[projectName] || null;   
     }
 }
 
