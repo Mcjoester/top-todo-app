@@ -9,6 +9,23 @@ class Task {
         this.id = uuidv4();
     }
 
+    toJSON() {
+        return {
+            title: this.title,
+            id: this.id,
+            dueDate: this.dueDate,
+            completed: this.completed
+        };
+    }
+
+   static fromJSON(json) {
+        const task = new Task(json.title);
+        task.id = json.id;
+        task.dueDate = json.dueDate;
+        task.completed = json.completed;
+        return task;
+    }
+
     getTitle() {
         return this.title;
     }

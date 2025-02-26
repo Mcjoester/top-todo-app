@@ -1,3 +1,5 @@
+import { Task } from "./task";
+
 class Project {
     constructor(name) {
         this.name = name;
@@ -6,6 +8,19 @@ class Project {
 
     addTask(task) {
         this.tasks.push(task);
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            tasks: this.tasks.map(task => task.toJSON())
+        };
+    }
+
+    static fromJSON(json) {
+        const project = new Project(json.name);
+        project.tasks = json.tasks.map(taskJson => Task.fromJSON(taskJson));
+        return project;
     }
 
     removeTask(index) {

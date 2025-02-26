@@ -1,4 +1,5 @@
 import { Task } from "./task";
+import { StorageService } from "./storagservice";
 import { TaskService } from "./taskservice";
 import { Project } from "./project";
 import { ProjectService } from "./projectservice";
@@ -8,7 +9,12 @@ import { ToDoUI } from "./todo-ui";
 
 class ToDoApp {
     constructor() {
-        this.projectService = new ProjectService();
+        // Initialize the storage service
+        this.storageService = new StorageService();
+
+        // Initialize project and task services
+        this.projectService = new ProjectService(this.storageService); // Pass the storage service here
+
         this.taskService = new TaskService(this.projectService);
         this.projectService.setTaskService(this.taskService)
         this.todoUI = new ToDoUI(this.taskService, this.projectService, '#list-container', '#project-container', '#default-btn-container');

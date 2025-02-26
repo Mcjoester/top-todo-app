@@ -19,6 +19,7 @@ class TaskService {
         const project = this.projectService.getProject(projectName);
         if (project) {
             project.addTask(task);
+            this.projectService.saveProjects();
             console.log(`Task added to project: ${project.name}`, task);
         } else {
             console.log(`${projectName} does not exist`);
@@ -29,76 +30,10 @@ class TaskService {
             const inbox = this.projectService.getProject('Inbox');
             if (inbox) {
                 inbox.addTask(task);
+                this.projectService.saveProjects();
                 console.log(`Task added to inbox`, task);
             }
         }
-    }
-
-    setTaskDateFromAllProjects(task, newDate) {
-        const projects = this.projectService.getProjects(); // Dynamically fetch all projects
-        projects.forEach((project) => {
-            const taskIndex = project.getTasks().findIndex(t => t.id === task.id); // Find the task in the current project
-            if (taskIndex !== -1) {
-                project.setDate(taskIndex, newDate); // Update the task's date
-            }
-        });
-    }
-    
-
-    setTaskDate(projectName, index, newDate) {
-        const project = this.projectService.getProject(projectName);
-        if (project) {
-            const task = project.getTask(index);
-            if (task) {
-                this.setTaskDateFromAllProjects(task, newDate);
-                return true; // Signal success
-            } else {
-                console.log('Task not found');
-                return false;
-            }
-        } else {
-            console.log('Project not found');
-            return false;
-        }
-    }
-
-    completeTaskFromAllProjects(task) {
-        const projects = this.projectService.getProjects();
-        projects.forEach((project) => {
-            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
-            if (taskIndex !== -1) {
-                project.completeTask(taskIndex);
-            }
-        })
-    }
-
-    completeTask(projectName, index) {
-        const project = this.projectService.getProject(projectName);
-        if (project) {
-            const task = project.getTask(index);
-            if (task) {
-                // Complete task from all projects
-                this.completeTaskFromAllProjects(task);
-            } else {
-                console.log('Task not found.');
-            }
-        } else {
-            console.log('Project not found.');
-        }
-    }
-
-    removeTaskFromAllProjects(task) {
-        const projects = this.projectService.getProjects();
-        console.log(`Removing task ${task.title} ID: ${task.id} from all projects`)
-        projects.forEach((project) => {
-            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
-            if (taskIndex !== -1) {
-                (console.log(`Removing task from project: ${project.name}`));
-                project.removeTask(taskIndex);
-            } else {
-                console.log(`Task not found in project ${project.name}`);
-            }
-        });
     }
 
     removeTask(projectName, taskIndex) {
@@ -117,22 +52,38 @@ class TaskService {
         }
     }
 
-    removeAllTasksFromProject(projectName) {
+    setTaskDate(projectName, index, newDate) {
         const project = this.projectService.getProject(projectName);
         if (project) {
-            const tasks = [...project.getTasks()];
-            console.log(`Tasks in project ${projectName}:`, tasks);
-            tasks.forEach(task => {
-                console.log(`Removing task ${task.title}, ID: ${task.id} from all projects`)
-                this.removeTaskFromAllProjects(task);
-            });
-            console.log(`All tasks from project - ${projectName} have been removed`);
+            const task = project.getTask(index);
+            if (task) {
+                this.setTaskDateFromAllProjects(task, newDate);
+                this.projectService.saveProjects();
+                return true; // Signal success
+            } else {
+                console.log('Task not found');
+                return false;
+            }
         } else {
             console.log('Project not found');
+            return false;
         }
+    }
 
-        const inbox = this.projectService.getProject('Inbox');
-        console.log('Inbox tasks after removal', inbox.getTasks());
+    completeTask(projectName, index) {
+        const project = this.projectService.getProject(projectName);
+        if (project) {
+            const task = project.getTask(index);
+            if (task) {
+                // Complete task from all projects
+                this.completeTaskFromAllProjects(task);
+                this.projectService.saveProjects();
+            } else {
+                console.log('Task not found.');
+            }
+        } else {
+            console.log('Project not found.');
+        }
     }
 
     getTasks(projectName) {
@@ -185,6 +136,7 @@ class TaskService {
             todaysTasks.forEach((task) => {
                 console.log(`Iterating through ${task.getTitle()}`);
                 todayProject.addTask(task);
+                this.projectService.saveProjects();
             });
         } else {
             console.log(`${todayProject} does not exist.`);
@@ -239,6 +191,7 @@ class TaskService {
             thisWeekTasks.forEach((task) => {
                 console.log(`Iterating through ${task.getTitle()}`);
                 thisWeekProject.addTask(task);
+                this.projectService.saveProjects();
             });
         } else {
             console.log(`${thisWeekProject} does not exist.`);
@@ -246,8 +199,61 @@ class TaskService {
         return thisWeekTasks;
     }
 
+    // Helper methods
 
+    setTaskDateFromAllProjects(task, newDate) {
+        const projects = this.projectService.getProjects(); // Dynamically fetch all projects
+        projects.forEach((project) => {
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id); // Find the task in the current project
+            if (taskIndex !== -1) {
+                project.setDate(taskIndex, newDate); // Update the task's date
+            }
+        });
+    }
 
+    completeTaskFromAllProjects(task) {
+        const projects = this.projectService.getProjects();
+        projects.forEach((project) => {
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
+            if (taskIndex !== -1) {
+                project.completeTask(taskIndex);
+            }
+        })
+    }
+
+    removeTaskFromAllProjects(task) {
+        const projects = this.projectService.getProjects();
+        console.log(`Removing task ${task.title} ID: ${task.id} from all projects`)
+        projects.forEach((project) => {
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
+            if (taskIndex !== -1) {
+                (console.log(`Removing task from project: ${project.name}`));
+                project.removeTask(taskIndex);
+            } else {
+                console.log(`Task not found in project ${project.name}`);
+            }
+        });
+    }
+
+   
+
+    removeAllTasksFromProject(projectName) {
+        const project = this.projectService.getProject(projectName);
+        if (project) {
+            const tasks = [...project.getTasks()];
+            console.log(`Tasks in project ${projectName}:`, tasks);
+            tasks.forEach(task => {
+                console.log(`Removing task ${task.title}, ID: ${task.id} from all projects`)
+                this.removeTaskFromAllProjects(task);
+            });
+            console.log(`All tasks from project - ${projectName} have been removed`);
+        } else {
+            console.log('Project not found');
+        }
+
+        const inbox = this.projectService.getProject('Inbox');
+        console.log('Inbox tasks after removal', inbox.getTasks());
+    }
 
 }
 
