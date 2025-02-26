@@ -44,6 +44,7 @@ class TaskService {
                 console.log(`Removing task ${task.title}, ID: ${task.id} from all projects`);
                 // Remove task from all projects
                 this.removeTaskFromAllProjects(task);
+                this.projectService.saveProjects();
             } else {
                 console.log('Task not found.');
             }
