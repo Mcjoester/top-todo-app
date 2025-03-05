@@ -119,6 +119,10 @@ class ToDoUI {
         icon.className = 'material-icons';
         icon.textContent = 'tag';
         icon.classList.add('tag-icon');
+        
+        const projectName = document.createElement('span');
+        projectName.className = 'project-name';
+        projectName.textContent = `${project.name}`;
 
 
         const rightBtnPanel = document.createElement('div');
@@ -152,7 +156,7 @@ class ToDoUI {
         });
 
         leftBtnPanel.appendChild(icon);
-        leftBtnPanel.appendChild(document.createTextNode(` ${project.name}`));
+        leftBtnPanel.appendChild(projectName);
         rightBtnPanel.appendChild(closeIcon);
         button.appendChild(leftBtnPanel);
         button.appendChild(rightBtnPanel);

@@ -8,7 +8,7 @@
 
 .logo-container {
     padding: 20px;
-    background-color: #2a2a2a;
+    background-color: #1b1b1b;
     color: white;
 }
 
@@ -28,7 +28,7 @@ main {
 section {
     padding: 20px;
     width: 350px;
-    background-color: rgb(228, 227, 227);
+    background-color: #323232;
 }
 
 .right-main {
@@ -37,7 +37,7 @@ section {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    background-color: #f4f4f4;
+    background-color: #d5d6d9;
     font-family: 'Poppins', 'sans-serif';
 }
 
@@ -59,6 +59,8 @@ li {
   border: none;
   padding: 10px 15px;
   border-radius: 10px;
+  background-color: #434242;
+  color: white;
 }
 
 .default-btn {
@@ -82,7 +84,7 @@ li {
     padding: 10px 15px;
     border-radius: 10px;
     border: none;
-    background-color: #283d3b;
+    background-color: #fc6e20;
     color: #e5e5e5;
     font-size: 20px;
     width: 100%;
@@ -106,7 +108,7 @@ li {
 .myProjects {
  font-family: 'Poppins', 'sans-serif';
  font-weight: bold;
- color: #626160;
+ color: white;
 }
 
 #add-project-btn {
@@ -116,7 +118,7 @@ li {
   border: none;
   width: 100%;
   font-size: 16px;
-  background-color: #283d3b;
+  background-color: #fc6e20;
   color: #e5e5e5;
 }
 
@@ -138,7 +140,7 @@ li {
 }
 
 .inbox-icon, .today-icon, .week-icon {
-    color: #3e3e3d;
+    color: white;
 }
 
 .tag-icon {
@@ -147,7 +149,7 @@ li {
 
 .close-icon {
     font-size: 15px;
-    color: #626160;
+    color: #cacaca;
     visibility: hidden;
     display: flex;
     justify-content: center;
