@@ -30,6 +30,10 @@ class Task {
         return this.title;
     }
 
+    setTitle(newTitle) {
+        this.title = newTitle;
+    }
+
     getDueDate() {
         return this.dueDate;
     }

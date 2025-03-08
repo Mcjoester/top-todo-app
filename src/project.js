@@ -48,9 +48,19 @@ class Project {
         return this.name;
     }
 
+    getTitle(index) {
+        const task = this.getTask(index);
+        task.getTitle();
+    }
+
     getDate(index) {
         const task = this.getTask(index);
         task.getDueDate();
+    }
+
+    setTitle(index, newTitle) {
+        const task = this.getTask(index);
+        task.setTitle(newTitle);
     }
 
     setDate(index, newDate) {

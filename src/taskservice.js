@@ -53,6 +53,24 @@ class TaskService {
         }
     }
 
+    setNewTitle(projectName, index, newTitle) {
+        const project = this.projectService.getProject(projectName);
+        if (project) {
+            const task = project.getTask(index);
+            if (task) {
+                this.setTaskTitleFromAllProjects(task, newTitle);
+                this.projectService.saveProjects();
+                return true;
+            } else {
+                console.log('Task not found.');
+                return false;
+            }
+        } else {
+            console.log('Project not found');
+            return false;
+        }
+    }
+
     setTaskDate(projectName, index, newDate) {
         const project = this.projectService.getProject(projectName);
         if (project) {
@@ -201,6 +219,16 @@ class TaskService {
     }
 
     // Helper methods
+
+    setTaskTitleFromAllProjects(task, newTitle) {
+        const projects = this.projectService.getProjects();
+        projects.forEach((project) => {
+            const taskIndex = project.getTasks().findIndex(t => t.id === task.id);
+            if (taskIndex != -1) {
+                project.setTitle(taskIndex, newTitle);
+            }
+        });
+    }
 
     setTaskDateFromAllProjects(task, newDate) {
         const projects = this.projectService.getProjects(); // Dynamically fetch all projects

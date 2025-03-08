@@ -218,8 +218,22 @@ button.default-btn:focus, .inbox-icon .today-icon .week-icon {
     cursor: pointer;
 }
 
+.task-title-span {
+    cursor: pointer;
+}
+
 .date-input {
     display: none;
+}
+
+.task-title-input {
+    display: none;
+}
+
+input#title-input-id {
+    border: 1px solid #ababab;
+    width: 40%;
+    font-size: 16px;
 }
 
 .active {

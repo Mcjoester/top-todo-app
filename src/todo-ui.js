@@ -236,7 +236,8 @@ class ToDoUI {
         const taskContainer = this.createTaskContainer();
         const radioButton = this.createRadioButton(task.id);
 
-        const titleSpan = this.createSpan(task.title);
+        const titleSpan = this.createTitleSpan(task.title);
+        const titleInput = this.createTitleInput(task.id);
         const dueDateSpan = this.createDateSpan(`Due: ${task.dueDate}`);
         const dueDateInput = this.createDueDateInput(task.id);
 
@@ -244,6 +245,7 @@ class ToDoUI {
         cardDiv.appendChild(taskContainer);
         radioContainer.appendChild(radioButton);
         taskContainer.appendChild(titleSpan);
+        taskContainer.appendChild(titleInput);
         taskContainer.appendChild(dueDateSpan);
         taskContainer.appendChild(dueDateInput);
 
@@ -269,6 +271,24 @@ class ToDoUI {
         return span;
     }
 
+    createTitleSpan(text) {
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = text;
+        titleSpan.className = 'task-title-span';
+
+        titleSpan.addEventListener('click', () => {
+            titleSpan.style.display = 'none';
+
+            const titleInput = titleSpan.nextElementSibling;
+            if (titleInput && titleInput.classList.contains('task-title-input')) {
+                titleInput.value = titleSpan.textContent;
+                titleInput.style.display = 'block';
+                titleInput.focus();
+            }
+        });
+        return titleSpan;
+    }
+
     createDateSpan(text) {
         const dateSpan = document.createElement('span');
         dateSpan.textContent = text;
@@ -284,6 +304,56 @@ class ToDoUI {
             }
         });
         return dateSpan;
+    }
+
+    createTitleInput(taskId) {
+        const titleInput = document.createElement('input');
+        titleInput.className = 'task-title-input';
+        titleInput.type = 'text';
+        titleInput.id = 'title-input-id';
+        titleInput.style.display = 'none';
+        
+        titleInput.addEventListener('blur', () => {
+            const newTitle = titleInput.value.trim();
+            if (newTitle.length === 0) {
+                alert('Input can not be empty');
+                const titleSpan = titleInput.previousElementSibling;
+                titleInput.value = titleSpan.textContent;
+            } else if (newTitle) {
+                const titleSpan = titleInput.previousElementSibling;
+                if (titleSpan && titleSpan.classList.contains('task-title-span')) {
+                    const projectName = this.activeProject;
+                    titleSpan.textContent = newTitle;
+
+                    const tasks = this.taskService.getTasks(projectName);
+                    const taskIndex = tasks.findIndex(task => task.id === taskId);
+
+                    if (taskIndex !== -1) {
+                        this.taskService.setNewTitle(projectName, taskIndex, newTitle);
+                        if (projectName === 'Today') {
+                            this.renderTodayTasks();
+                        } else if (projectName === 'This Week') {
+                            this.renderTodayTasks();
+                        } else {
+                            this.renderTasks();
+                        }
+                    }
+
+                    
+
+                    titleSpan.style.display = 'inline';
+                    titleInput.style.display = 'none';
+                }
+            }
+        });
+
+        titleInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                titleInput.blur();
+            }
+        });
+
+        return titleInput;
     }
 
     createDueDateInput(taskId) {
